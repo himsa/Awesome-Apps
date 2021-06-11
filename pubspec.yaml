@@ -2,21 +2,21 @@ name: awesomeapp
 version: 1.0.0+1
 publish_to: none
 description: A new Flutter project.
-environment: 
-  sdk: '>=2.12.0 <3.0.0'
+environment:
+  sdk: ">=2.12.0 <3.0.0"
 
-dependencies: 
+dependencies:
   cupertino_icons: ^1.0.2
+  auto_animated: ^3.0.0
   get_cli: ^1.5.0
   get: 4.1.4
   http: 0.13.3
-  flutter: 
+  flutter:
     sdk: flutter
 
-dev_dependencies: 
-  flutter_test: 
+dev_dependencies:
+  flutter_test:
     sdk: flutter
 
-flutter: 
+flutter:
   uses-material-design: true
-
