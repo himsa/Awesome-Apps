@@ -9,7 +9,6 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Obx(
         () => CustomScrollView(
@@ -59,9 +58,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                     itemBuilder: animationItemBuilder(
                       (index) => HorizontalItem(
-                        onPressed: () {
-                          print('click $index');
-                        },
+                        onPressed: () => controller.gotoDetail(),
                         title:
                             'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. #' +
                                 index.toString(),
@@ -72,13 +69,10 @@ class HomeView extends GetView<HomeController> {
                     controller: controller.scrollController,
                     showItemInterval: Duration(milliseconds: 150),
                     showItemDuration: Duration(milliseconds: 350),
-                    reAnimateOnVisibility: true,
                     itemCount: 20,
                     itemBuilder: animationItemBuilder(
                       (index) => VerticalItem(
-                          onPressed: () {
-                            print('click $index');
-                          },
+                          onPressed: () => controller.gotoDetail(),
                           title:
                               'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. #' +
                                   index.toString()),

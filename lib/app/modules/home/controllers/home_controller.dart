@@ -1,4 +1,5 @@
 import 'package:auto_animated/auto_animated.dart';
+import 'package:awesomeapp/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,6 +31,7 @@ class HomeController extends GetxController {
   void setGrid() => grid.value = true;
   void setList() => grid.value = false;
   void setCollapsed(bool value) => collapsed.value = value;
+  void gotoDetail() => Get.toNamed(Routes.DETAIL);
 
   bool get _isAppBarExpanded {
     return scrollController.hasClients &&
