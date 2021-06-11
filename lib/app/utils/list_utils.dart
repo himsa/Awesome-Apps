@@ -1,3 +1,4 @@
+import 'package:awesomeapp/app/modules/home/domain/entity/photos_model.dart';
 import 'package:flutter/material.dart';
 
 class VerticalItem extends StatelessWidget {
@@ -72,15 +73,17 @@ class VerticalItem extends StatelessWidget {
 
 class HorizontalItem extends StatelessWidget {
   const HorizontalItem({
-    required this.title,
+    required this.data,
     required this.onPressed,
+    required this.onOpenLink,
     Key? key,
   }) : super(
           key: key,
         );
 
-  final String? title;
+  final Photo? data;
   final VoidCallback? onPressed;
+  final VoidCallback? onOpenLink;
 
   @override
   Widget build(BuildContext context) => Stack(
@@ -93,44 +96,48 @@ class HorizontalItem extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 3,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
-                    ),
-                    child: Image.network(
-                      'https://coverfiles.alphacoders.com/965/thumb-1920-96570.jpg',
-                      fit: BoxFit.cover,
+                  child: InkWell(
+                    onTap: onPressed,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10.0),
+                        topRight: Radius.circular(10.0),
+                      ),
+                      child: Image.network(
+                        data!.src!.landscape!,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.all(5.0),
-                    child: Text(
-                      title!,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
+                    child: InkWell(
+                      onTap: onOpenLink,
+                      child: Text(
+                        "${data!.photographer!}",
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          Positioned.fill(
-            child: Padding(
-              padding: EdgeInsets.all(4.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: onPressed,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // Positioned.fill(
+          //   child: Padding(
+          //     padding: EdgeInsets.all(4.0),
+          //     child: ClipRRect(
+          //       borderRadius: BorderRadius.circular(10.0),
+          //       child: Material(
+          //         color: Colors.transparent,
+          //         child: InkWell(
+          //           onTap: onPressed,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       );
 }

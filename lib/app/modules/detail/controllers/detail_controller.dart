@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 class DetailController extends GetxController {
   final collapsed = true.obs;
   late ScrollController scrollController;
+  var data = Get.arguments;
   @override
   void onInit() {
     super.onInit();
+    data = Get.arguments;
     scrollController = ScrollController()
       ..addListener(() {
         if (_isAppBarExpanded) {
