@@ -17,7 +17,6 @@ class HomeView extends GetView<HomeController> {
           isLoading: controller.lastPage.value,
           child: CustomScrollView(
             controller: controller.scrollController,
-            shrinkWrap: true,
             slivers: <Widget>[
               SliverAppBar(
                 title: Obx(
@@ -84,10 +83,11 @@ class HomeView extends GetView<HomeController> {
         ),
         shrinkWrap: true,
         primary: false,
+        padding: EdgeInsets.all(16.0),
         itemBuilder: animationItemBuilder(
           (index) {
             final photo = controller.photoList[index];
-            return HorizontalItem(
+            return VerticalItem(
               onPressed: () => controller.gotoDetail(photo),
               data: photo,
             );
@@ -104,10 +104,11 @@ class HomeView extends GetView<HomeController> {
         itemCount: controller.photoList.length,
         shrinkWrap: true,
         primary: false,
+        padding: EdgeInsets.all(16.0),
         itemBuilder: animationItemBuilder(
           (index) {
             final photo = controller.photoList[index];
-            return VerticalItem(
+            return HorizontalItem(
               onPressed: () => controller.gotoDetail(photo),
               data: photo,
             );

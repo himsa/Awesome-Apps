@@ -99,8 +99,6 @@ class HomeController extends SuperController<Photos> {
   void setList() => grid.value = false;
   void setCollapsed(bool value) => collapsed.value = value;
   void gotoDetail(dynamic args) => Get.toNamed(Routes.DETAIL, arguments: args);
-  void openUrl(String url) async =>
-      await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 
   bool get _isAppBarExpanded {
     return scrollController.hasClients &&

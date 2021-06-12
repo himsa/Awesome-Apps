@@ -1,22 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailController extends GetxController {
-  final collapsed = true.obs;
-  late ScrollController scrollController;
   var data = Get.arguments;
+  final color = 0.obs;
   @override
   void onInit() {
     super.onInit();
     data = Get.arguments;
-    scrollController = ScrollController()
-      ..addListener(() {
-        if (_isAppBarExpanded) {
-          collapsed.value = false;
-        } else {
-          collapsed.value = true;
-        }
-      });
+    parseColor(data!.avgColor!);
   }
 
   @override
@@ -27,10 +19,10 @@ class DetailController extends GetxController {
   @override
   void onClose() {}
 
-  void setCollapsed(bool value) => collapsed.value = value;
+  void parseColor(String data) =>
+      color.value = int.parse(data.replaceAll('#', '0xff'));
 
-  bool get _isAppBarExpanded {
-    return scrollController.hasClients &&
-        scrollController.offset > (170 - kToolbarHeight);
-  }
+  void openUrl(String link) async => await canLaunch(link)
+      ? await launch(link)
+      : throw 'Could not launch $link';
 }

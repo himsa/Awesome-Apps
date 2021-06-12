@@ -3,8 +3,8 @@ import 'package:awesomeapp/app/modules/home/domain/entity/photos_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class VerticalItem extends StatelessWidget {
-  const VerticalItem({
+class HorizontalItem extends StatelessWidget {
+  const HorizontalItem({
     required this.data,
     required this.onPressed,
     Key? key,
@@ -48,9 +48,26 @@ class VerticalItem extends StatelessWidget {
                   Expanded(
                     flex: 3,
                     child: Container(
-                      padding: EdgeInsets.only(left: 5.0),
-                      child: Text(
-                        "${data!.photographer!}",
+                      padding: EdgeInsets.all(5.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                "📷 ",
+                              ),
+                              Text(
+                                "${data!.photographer!}",
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
+                            ],
+                          ),
+                          Text(
+                            "ID : ${data!.id}",
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -76,8 +93,8 @@ class VerticalItem extends StatelessWidget {
       );
 }
 
-class HorizontalItem extends StatelessWidget {
-  const HorizontalItem({
+class VerticalItem extends StatelessWidget {
+  const VerticalItem({
     required this.data,
     required this.onPressed,
     Key? key,
@@ -120,7 +137,9 @@ class HorizontalItem extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.all(5.0),
                     child: Text(
-                      "${data!.photographer!}",
+                      "📷 ${data!.photographer!}",
+                      style: Theme.of(context).textTheme.headline6,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
