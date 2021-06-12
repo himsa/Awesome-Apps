@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:auto_animated/auto_animated.dart';
-
 import 'package:awesomeapp/app/routes/app_pages.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../domain/entity/photos_model.dart';
 import '../domain/adapters/repository_adapter.dart';
+import '../domain/entity/pagination_filter.dart';
 
 class HomeController extends SuperController<Photos> {
   HomeController({required this.homeRepository});
@@ -16,6 +15,13 @@ class HomeController extends SuperController<Photos> {
   final grid = true.obs;
   final collapsed = true.obs;
   late ScrollController scrollController;
+  final photoList = <Photo>[].obs;
+  final lastPage = false.obs;
+  final isLoading = false.obs;
+  final _paginationFilter = PaginationFilter().obs;
+
+  int? get limit => _paginationFilter.value.limit;
+  int? get _page => _paginationFilter.value.page;
 
   @override
   void onInit() {
@@ -28,8 +34,8 @@ class HomeController extends SuperController<Photos> {
           collapsed.value = true;
         }
       });
-    //Loading, Success, Error handle with 1 line of code
-    append(() => homeRepository.getPhotos);
+    ever(_paginationFilter, (_) => _getAllPhotos());
+    _changePaginationFilter(1, 15);
   }
 
   @override
@@ -101,23 +107,41 @@ class HomeController extends SuperController<Photos> {
         scrollController.offset > (170 - kToolbarHeight);
   }
 
-  final options = LiveOptions(
-    // Start animation after (default zero)
-    delay: Duration(seconds: 1),
+  Future<void> _getAllPhotos() async {
+    isLoading.value = true;
+    final photosData = await homeRepository.getPhotos(_paginationFilter.value);
+    if (photosData.photos!.isEmpty) {
+      lastPage.value = true;
+    }
+    photoList.addAll(photosData.photos!);
+    isLoading.value = true;
+  }
 
-    // Show each item through (default 250)
-    showItemInterval: Duration(milliseconds: 500),
+  Future<void> refreshAllPhotos() async {
+    photoList.clear();
+    lastPage.value = false;
+    isLoading.value = true;
+    _changePaginationFilter(1, 15);
+    final photosData = await homeRepository.getPhotos(_paginationFilter.value);
+    if (photosData.photos!.isEmpty) {
+      lastPage.value = true;
+    }
+    photoList.addAll(photosData.photos!);
+    isLoading.value = true;
+  }
 
-    // Animation duration (default 250)
-    showItemDuration: Duration(seconds: 1),
+  void changeTotalPerPage(int limitValue) {
+    photoList.clear();
+    lastPage.value = false;
+    _changePaginationFilter(1, limitValue);
+  }
 
-    // Animations starts at 0.05 visible
-    // item fraction in sight (default 0.025)
-    visibleFraction: 0.05,
+  void _changePaginationFilter(int page, int limit) {
+    _paginationFilter.update((val) {
+      val!.page = page;
+      val.limit = limit;
+    });
+  }
 
-    // Repeat the animation of the appearance
-    // when scrolling in the opposite direction (default false)
-    // To get the effect as in a showcase for ListView, set true
-    reAnimateOnVisibility: false,
-  );
+  void loadNextPage() => _changePaginationFilter(_page! + 1, limit!);
 }

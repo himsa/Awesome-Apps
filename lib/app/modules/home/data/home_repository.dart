@@ -1,3 +1,5 @@
+import 'package:awesomeapp/app/modules/home/domain/entity/pagination_filter.dart';
+
 import '../domain/entity/photos_model.dart';
 
 import '../domain/adapters/repository_adapter.dart';
@@ -9,8 +11,11 @@ class HomeRepository implements IHomeRepository {
   final IHomeProvider provider;
 
   @override
-  Future<Photos> getPhotos() async {
-    final photos = await provider.getPhotos("/v1/curated?page=1&per_page=10");
+  Future<Photos> getPhotos(PaginationFilter paginationFilter) async {
+    print(
+        '/v1/curated?page=${paginationFilter.page}&per_page=${paginationFilter.limit}');
+    final photos = await provider.getPhotos(
+        "/v1/curated?page=${paginationFilter.page}&per_page=${paginationFilter.limit}");
     if (photos.status.hasError) {
       return Future.error(photos.statusText!);
     } else {

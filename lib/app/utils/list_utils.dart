@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 
 class VerticalItem extends StatelessWidget {
   const VerticalItem({
-    required this.title,
+    required this.data,
     required this.onPressed,
+    required this.onOpenLink,
     Key? key,
   }) : super(
           key: key,
         );
 
-  final String? title;
+  final Photo? data;
   final VoidCallback? onPressed;
+  final VoidCallback? onOpenLink;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -32,7 +34,7 @@ class VerticalItem extends StatelessWidget {
                         bottomLeft: Radius.circular(10.0),
                       ),
                       child: Image.network(
-                        'https://coverfiles.alphacoders.com/965/thumb-1920-96570.jpg',
+                        data!.src!.small!,
                         fit: BoxFit.cover,
                         height: 96,
                       ),
@@ -42,28 +44,15 @@ class VerticalItem extends StatelessWidget {
                     flex: 3,
                     child: Container(
                       padding: EdgeInsets.only(left: 5.0),
-                      child: Text(
-                        title!,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
+                      child: InkWell(
+                        onTap: onOpenLink,
+                        child: Text(
+                          "${data!.photographer!}",
+                        ),
                       ),
                     ),
                   ),
                 ],
-              ),
-            ),
-            Positioned.fill(
-              child: Padding(
-                padding: EdgeInsets.all(4.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: onPressed,
-                    ),
-                  ),
-                ),
               ),
             ),
           ],
@@ -124,20 +113,6 @@ class HorizontalItem extends StatelessWidget {
               ],
             ),
           ),
-          // Positioned.fill(
-          //   child: Padding(
-          //     padding: EdgeInsets.all(4.0),
-          //     child: ClipRRect(
-          //       borderRadius: BorderRadius.circular(10.0),
-          //       child: Material(
-          //         color: Colors.transparent,
-          //         child: InkWell(
-          //           onTap: onPressed,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ],
       );
 }
