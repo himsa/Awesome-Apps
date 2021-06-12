@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -13,19 +14,31 @@ class DetailView extends GetView<DetailController> {
           controller: controller.scrollController,
           slivers: <Widget>[
             SliverAppBar(
-              backgroundColor: Colors.indigo,
+              backgroundColor: Colors.white,
+              leading: Card(
+                shape: CircleBorder(),
+                child: BackButton(
+                  color: Colors.black,
+                ),
+              ),
               title: Visibility(
                 visible: !controller.collapsed.value,
                 child: Text(''),
               ),
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                background: Image.network(
-                  controller.data.src.original!,
+                background: CachedNetworkImage(
+                  imageUrl: controller.data!.src!.original!,
                   fit: BoxFit.cover,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
-              expandedHeight: MediaQuery.of(context).size.height * 0.7,
+              expandedHeight: MediaQuery.of(context).size.height * 0.9,
             ),
             SliverToBoxAdapter(
               child: Container(

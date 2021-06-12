@@ -1,3 +1,4 @@
+import 'package:auto_animated/auto_animated.dart';
 import 'package:awesomeapp/app/utils/list_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,6 @@ class HomeView extends GetView<HomeController> {
             shrinkWrap: true,
             slivers: <Widget>[
               SliverAppBar(
-                backgroundColor: Colors.indigo,
                 title: Obx(
                   () => Visibility(
                     visible: !controller.collapsed.value,
@@ -74,7 +74,7 @@ class HomeView extends GetView<HomeController> {
 
   _buildGridView() {
     return Obx(
-      () => GridView.builder(
+      () => LiveGrid.options(
         itemCount: controller.photoList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -84,32 +84,36 @@ class HomeView extends GetView<HomeController> {
         ),
         shrinkWrap: true,
         primary: false,
-        itemBuilder: (context, index) {
-          final photo = controller.photoList[index];
-          return HorizontalItem(
-            onPressed: () => controller.gotoDetail(photo),
-            onOpenLink: () => controller.openUrl(photo.photographerUrl!),
-            data: photo,
-          );
-        },
+        itemBuilder: animationItemBuilder(
+          (index) {
+            final photo = controller.photoList[index];
+            return HorizontalItem(
+              onPressed: () => controller.gotoDetail(photo),
+              data: photo,
+            );
+          },
+        ),
+        options: options,
       ),
     );
   }
 
   _buildListView() {
     return Obx(
-      () => ListView.builder(
+      () => LiveList.options(
         itemCount: controller.photoList.length,
         shrinkWrap: true,
         primary: false,
-        itemBuilder: (context, index) {
-          final photo = controller.photoList[index];
-          return VerticalItem(
-            onPressed: () => controller.gotoDetail(photo),
-            onOpenLink: () => controller.openUrl(photo.photographerUrl!),
-            data: photo,
-          );
-        },
+        itemBuilder: animationItemBuilder(
+          (index) {
+            final photo = controller.photoList[index];
+            return VerticalItem(
+              onPressed: () => controller.gotoDetail(photo),
+              data: photo,
+            );
+          },
+        ),
+        options: options,
       ),
     );
   }

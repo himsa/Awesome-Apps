@@ -1,11 +1,12 @@
+import 'package:auto_animated/auto_animated.dart';
 import 'package:awesomeapp/app/modules/home/domain/entity/photos_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class VerticalItem extends StatelessWidget {
   const VerticalItem({
     required this.data,
     required this.onPressed,
-    required this.onOpenLink,
     Key? key,
   }) : super(
           key: key,
@@ -13,7 +14,6 @@ class VerticalItem extends StatelessWidget {
 
   final Photo? data;
   final VoidCallback? onPressed;
-  final VoidCallback? onOpenLink;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -33,10 +33,15 @@ class VerticalItem extends StatelessWidget {
                         topLeft: Radius.circular(10.0),
                         bottomLeft: Radius.circular(10.0),
                       ),
-                      child: Image.network(
-                        data!.src!.small!,
+                      child: CachedNetworkImage(
+                        imageUrl: data!.src!.portrait!,
                         fit: BoxFit.cover,
-                        height: 96,
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => Center(
+                          child: CircularProgressIndicator(
+                              value: downloadProgress.progress),
+                        ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                     ),
                   ),
@@ -44,15 +49,26 @@ class VerticalItem extends StatelessWidget {
                     flex: 3,
                     child: Container(
                       padding: EdgeInsets.only(left: 5.0),
-                      child: InkWell(
-                        onTap: onOpenLink,
-                        child: Text(
-                          "${data!.photographer!}",
-                        ),
+                      child: Text(
+                        "${data!.photographer!}",
                       ),
                     ),
                   ),
                 ],
+              ),
+            ),
+            Positioned.fill(
+              child: Padding(
+                padding: EdgeInsets.all(4.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: onPressed,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],
@@ -64,7 +80,6 @@ class HorizontalItem extends StatelessWidget {
   const HorizontalItem({
     required this.data,
     required this.onPressed,
-    required this.onOpenLink,
     Key? key,
   }) : super(
           key: key,
@@ -72,7 +87,6 @@ class HorizontalItem extends StatelessWidget {
 
   final Photo? data;
   final VoidCallback? onPressed;
-  final VoidCallback? onOpenLink;
 
   @override
   Widget build(BuildContext context) => Stack(
@@ -85,32 +99,46 @@ class HorizontalItem extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 3,
-                  child: InkWell(
-                    onTap: onPressed,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10.0),
-                        topRight: Radius.circular(10.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: data!.src!.landscape!,
+                      fit: BoxFit.cover,
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => Center(
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress),
                       ),
-                      child: Image.network(
-                        data!.src!.landscape!,
-                        fit: BoxFit.cover,
-                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                   ),
                 ),
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.all(5.0),
-                    child: InkWell(
-                      onTap: onOpenLink,
-                      child: Text(
-                        "${data!.photographer!}",
-                      ),
+                    child: Text(
+                      "${data!.photographer!}",
                     ),
                   ),
                 ),
               ],
+            ),
+          ),
+          Positioned.fill(
+            child: Padding(
+              padding: EdgeInsets.all(4.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: onPressed,
+                  ),
+                ),
+              ),
             ),
           ),
         ],
@@ -176,3 +204,8 @@ Widget Function(
             ),
           ),
         );
+final options = LiveOptions(
+  showItemInterval: Duration(milliseconds: 100),
+  showItemDuration: Duration(milliseconds: 100),
+  visibleFraction: 0.05,
+);
